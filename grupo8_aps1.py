@@ -107,17 +107,19 @@ print("A taxa de transferência de calor em aleta infinita é: %f" %(emezao))
 # Comparação da taxa de transferência de calor em aleta finita com a de aleta infinita
 # ----------------------------------
 
-# R: A taxa de transferência de calor com o método da aleta infinita é 1.7 vezes maior
-#    do que a taxa de transferência de calor com o método da aleta finita. 
+# R: A taxa de transferência de calor com o método da aleta infinita é 1.7 vezes maior do que a taxa de transferência de calor com o método da aleta finita. 
 
 # # ----------------------------------
 # # Qual deveria ser o comprimento da aleta para que a hipótese da aleta infinita forneça uma medida precisa?
 # # ----------------------------------
-# considerando que com a hipotese da aleta infinta, temp_base = temp_ambiente
-# entao, podemos considerar a troca de calor como adiabatica
-# para a troca adiabatica, q_a = M * tanh(mc*cl)
-# para a hipotese da aleta infinita, q_a = M
-# igualando os termos, temos M = M * tanh(m * l)
+
+# Considerando que com a hipótese da aleta infinta, temp_base = temp_ambiente
+# Podemos considerar a troca de calor como adiabática
+# Para a troca adiabática, q_a = M * tanh(mc*cl)
+
+# Para a hipótese da aleta infinita, q_a = M
+# Igualando os termos, temos M = M * tanh(m * l)
+
 # 1 = tanh(m * l)
 # m = math.sqrt((h*p)/(k_al*area_t)) #m^-1
 # m = 3.726
@@ -132,27 +134,31 @@ print("O comprimento L para que a hipótese da haleta infinta forneça uma medid
 
 
 # ----------------------------------
-#Determinando a condutividade termica do material desconhecido
+#Determinando a condutividade térmica do material desconhecido
 # ----------------------------------
-#
+
+# theta = Temp_material - Temp_Ambiente
+# theta_b = Temp_base - Temp_Ambiente
+
 # theta/theta_b = e**(-sqrt((h*p) / (k*A))) * x
 
-# log_e(theta/theta_b) = (-sqrt((h*p) / (k*A)) ) * x
+# ln(theta/theta_b) = (-sqrt((h*p) / (k*A)) ) * x
 
-# [log_e(theta/theta_b) / x ] = -sqrt((h*p) / (k*A))
+# [ln(theta/theta_b) / x ] = -sqrt((h*p) / (k*A))
 
-# log_e(theta/theta_b) / x ]^2 = (h*p) / (k*A)
+# ln(theta/theta_b) / x ]^2 = (h*p) / (k*A)
 
-# k = - (h * p)/( a * [log_e( theta/theta_b ) / x ]^2 )
+# k =  (h * p)/( a * [ ln(theta/theta_b) / x ]^2 )
 
 
 # ----------------------------------
 #Calculando a condutividade termica do material desconhecido
 # ----------------------------------
 
-ex_2_t_a = 75 # Graus Celcius
-ex_2_t_base = 100 # Graus Celcius
-ex_2_t_ambiente = 25 # Graus Celcius
+ex_2_t_a = 75 # Graus Celsius
+ex_2_t_b = 60 # Graus Celsius
+ex_2_t_base = 100 # Graus Celsius
+ex_2_t_ambiente = 25 # Graus Celsius
 k_a = 240 #W/m^2 K
 l = 0.175 # Comprimento - metros
 d = 0.024 # Diâmetro - metros
@@ -162,23 +168,28 @@ area_t = (math.pi*(d**2))/4 # Área transversal - metros^2
 area_s = (2*math.pi*raio*l) + area_t #Área superfície 
 h = 20 # Coeficiente de convecção - W/m^2 K
 
-ex_2_theta = ex_2_t_a  - ex_2_t_ambiente
+ex_2_theta_a = ex_2_t_a  - ex_2_t_ambiente
+ex_2_theta_b = ex_2_t_b  - ex_2_t_ambiente
 ex_2_theta_base = ex_2_t_base - ex_2_t_ambiente
 
-div = ex_2_theta / ex_2_theta_base
+div_a = ex_2_theta_a / ex_2_theta_base
 
-hp = h * p
-log_e = math.log(div)
+ln_a = math.log(div_a)
 
 #calculando x
 
 sqrt = math.sqrt((h * p) / (k_a * area_t))
-x = log_e / (-sqrt)
-nominador = - h*p 
-denominador  = ((log_e)/ x) ** 2
+x = ln_a / (-sqrt)
+
+div_b = ex_2_theta_b / ex_2_theta_base
+
+ln_b = math.log(div_b)
+
+nominador = h*p 
+denominador  = (ln_b/ x) ** 2
 
 
 k = nominador / ( area_t * denominador)
 
-print(k)
+print("A condutividade térmica de kb é: %f" %(k))
 
